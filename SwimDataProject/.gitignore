@@ -58,10 +58,10 @@ build/
 .env.test.local
 .env.production.local
 
-# Documentation
-01-project-planning.md
-02-data-sources.md
-03-web-scraping-strategy.md
-progress-log.md
-04-data-architecture.md
-05-implementation-plan.md
+# Do NOT ignore documentation files
+# 01-project-planning.md
+# 02-data-sources.md
+# 03-web-scraping-strategy.md
+# 04-data-architecture.md
+# 05-implementation-plan.md
+# progress-log.md
