@@ -1,183 +1,161 @@
 # Swim Data Project
 
+A comprehensive platform for collecting, analyzing, and visualizing swimming data for high school swimmers, allowing them to compare their performance at city, state, regional, national, and international levels.
+
+[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104.0-green)](https://fastapi.tiangolo.com/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0.21-orange)](https://www.sqlalchemy.org/)
+
 ## Project Overview
-This project aims to create a comprehensive swimming data platform focused on high school swimmers, allowing them to compare their performance against peers at the city, state, regional, national, and international levels. Our approach relies on web scraping to collect data from various public sources, as we currently don't have partnerships with swimming organizations.
 
-## Table of Contents
+This project aims to create a data platform that provides high school swimmers with insights about their competitive standing. It collects data from various swimming sources through web scraping, stores it in a structured database, and provides API endpoints and visualizations for analysis.
 
-1. [Project Planning](./01-project-planning.md)
-   - Project goals and scope
-   - Target audiences
-   - Key features
+### Key Features
 
-2. [Data Sources Analysis](./02-data-sources.md)
-   - Available public data sources
-   - Technical accessibility analysis
-   - Data formats and structures
-
-3. [Web Scraping Strategy](./03-web-scraping-strategy.md)
-   - Priority targets
-   - Technical implementation
-   - Ethical considerations
-
-4. [Data Architecture](./04-data-architecture.md)
-   - Schema design
-   - Deduplication strategy
-   - Data validation
-
-5. [Implementation Plan](./05-implementation-plan.md)
-   - Development phases
-   - Technical architecture
-   - Testing approach
-
-6. [Progress Log](./progress-log.md)
-   - Detailed chronological record of all work completed
-
-## Project Status
-
-Current phase: Advanced Implementation
-
-We have completed the following milestones:
-- Created the repository structure and basic architecture
-- Implemented the database schema with SQLAlchemy ORM models
-- Developed a FastAPI-based REST API with comprehensive endpoints
-- Created base scraper framework with proxy rotation and rate limiting
-- Successfully tested core functionality with a SQLite database
-- Implemented full data extraction for USA Swimming with real-time parsing
-- Added search strategies for swimmers, events, and geographic regions
-- Implemented NISCA scraper for high school records and All-America lists
-- Integrated multiple data sources with standardized storage formats
-- Created robust data parsing and transformation pipelines
+- Multi-source data collection (USA Swimming, NISCA, state associations, etc.)
+- Comprehensive swimmer profiles with times and rankings
+- Multi-level comparisons (city, state, regional, national, international)
+- Performance analytics and progression tracking
+- Comparison of high school swimmers to elite/Olympic swimmers
+- Interactive data visualizations
 
 ## Getting Started
 
 ### Prerequisites
-- Python 3.9+ (tested with Python 3.13)
-- Required packages listed in requirements.txt
-- For building some packages: C/C++ compiler (e.g., Microsoft Visual C++ Build Tools)
 
-### Setup and Installation
-1. Clone the repository
+- Python 3.9+
+- PostgreSQL 13+ (SQLite for development)
+- Chrome/Chromium browser (for Selenium scrapers)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/dbaca04/SwimDataProject.git
+   cd SwimDataProject
+   ```
+
 2. Create a virtual environment:
-   ```
+   ```bash
    python -m venv venv
-   venv\Scripts\activate  # On Windows
-   source venv/bin/activate  # On Unix/MacOS
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
+
 3. Install dependencies:
-   ```
+   ```bash
    pip install -r requirements.txt
    ```
-4. Initialize the database:
+
+4. Configure environment:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your settings
    ```
-   python database/setup_db.py --drop
+
+5. Initialize the database:
+   ```bash
+   python main.py init-db
    ```
-5. Start the API server:
+
+6. Run a scraper:
+   ```bash
+   python main.py scrape --name usa_swimming
    ```
-   python web/backend/server.py
+
+7. Start the API server:
+   ```bash
+   python main.py api
    ```
-6. Access the API documentation at http://localhost:8000/docs
 
-## Testing Status
+8. Access the API documentation:
+   - Open a browser and navigate to http://localhost:8000/docs
 
-- **Database Layer**: ✅ Successfully tested with SQLite
-- **API Layer**: ✅ All endpoints functional with proper relationships
-- **Scraper Layer**: ✅ Multiple scrapers implemented (USA Swimming, NISCA)
-- **Frontend Layer**: 📝 Not yet implemented
+For more detailed setup instructions, see [Getting Started](./getting-started.md).
 
-## Scraper Usage
-
-### USA Swimming Scraper
-
-To test the USA Swimming scraper, you can use the included test script:
-
-```bash
-# Search for a specific swimmer
-python scrapers/test_scraper.py --test swimmer
-
-# Search for a specific event
-python scrapers/test_scraper.py --test event
-
-# Search by state
-python scrapers/test_scraper.py --test state
-
-# Run a full scrape with limited scope
-python scrapers/test_scraper.py --test full
-```
-
-### NISCA Scraper
-
-To test the NISCA scraper for high school records and All-America lists:
-
-```bash
-# Test national records scraping
-python scrapers/test_nisca_scraper.py --test records
-
-# Test All-America lists scraping
-python scrapers/test_nisca_scraper.py --test all_america
-
-# Run a full NISCA scrape
-python scrapers/test_nisca_scraper.py --test full
-```
-
-### Using the Main Application
-
-You can also run scrapers through the main application:
-
-```bash
-# Run USA Swimming scraper
-python main.py scrape --name usa_swimming
-
-# Run NISCA scraper
-python main.py scrape --name nisca
-```
-
-## Repository Structure
+## Project Structure
 
 ```
 SwimDataProject/
-├── README.md                # Project overview
-├── docs/                    # Documentation
-│   ├── 01-project-planning.md
-│   ├── 02-data-sources.md
-│   ├── 03-web-scraping-strategy.md
-│   ├── 04-data-architecture.md
-│   └── 05-implementation-plan.md
-├── scrapers/                # Web scraping code
-│   ├── __init__.py
+├── scrapers/                # Web scraping modules
 │   ├── base_scraper.py      # Base scraper class
-│   └── usa_swimming_scraper.py  # USA Swimming implementation
-├── database/                # Database schema and scripts
-│   ├── __init__.py
+│   ├── usa_swimming_scraper.py  # USA Swimming implementation
+│   └── nisca_scraper.py     # NISCA implementation
+├── database/                # Database schema and operations
 │   ├── database.py          # Database connection utilities
 │   ├── models.py            # SQLAlchemy ORM models
-│   ├── setup_db.py          # Database initialization
-│   └── migrations/          # Alembic migration scripts
+│   └── setup_db.py          # Database initialization
 ├── web/                     # Web application code
 │   ├── backend/             # Backend API
 │   │   ├── api/             # API routes and models
 │   │   ├── config.py        # Backend configuration
 │   │   └── server.py        # Server startup script
-│   └── frontend/            # Frontend (pending)
-├── analysis/                # Data analysis tools (pending)
-├── requirements.txt         # Python dependencies
-├── .gitignore               # Git ignore rules
-├── .env.example             # Example environment configuration
-└── progress-log.md          # Development progress log
+│   └── frontend/            # Frontend (in development)
+├── analysis/                # Data analysis tools
+├── main.py                  # Main entry point
+└── docs/                    # Project documentation
+    ├── 01-project-planning.md
+    ├── 02-data-sources.md
+    ├── 03-web-scraping-strategy.md
+    ├── 04-data-architecture.md
+    ├── 05-implementation-plan.md
+    └── progress-log.md
 ```
 
-## Next Steps
+## Data Sources
 
-1. Docker containerization for consistent environments
-2. Complete the scrapers with actual data extraction logic
-3. Set up PostgreSQL for production environment
-4. Begin frontend development with React
-5. Implement entity resolution for deduplication
+The project collects data from multiple sources:
 
-## Contributors
+1. **USA Swimming**: Official database for USA Swimming with sanctioned meet results
+2. **NISCA**: National Interscholastic Swim Coaches Association records and rankings
+3. **State Athletic Associations**: State-level competition results
+4. **SwimCloud**: Additional rankings and analytics
+5. **SwimStandards**: Time standards and additional profiles
+6. **SwimRankings.net**: International comparison data
 
-- Development Team
+## Development Status
+
+Current phase: Initial Implementation and Testing
+
+- [x] Repository structure and architecture
+- [x] Database schema with SQLAlchemy ORM models
+- [x] FastAPI-based REST API with comprehensive endpoints
+- [x] Base scraper framework with proxy rotation and rate limiting
+- [x] USA Swimming scraper implementation
+- [x] NISCA scraper implementation
+- [ ] Frontend development with React
+- [ ] Advanced analytics and visualization
+
+## Testing
+
+Run tests using pytest:
+
+```bash
+pytest
+```
+
+For more information on testing, see [Testing Notes](./testing-notes.md).
+
+## Documentation
+
+- [Project Planning](./01-project-planning.md)
+- [Data Sources Analysis](./02-data-sources.md)
+- [Web Scraping Strategy](./03-web-scraping-strategy.md)
+- [Data Architecture](./04-data-architecture.md)
+- [Implementation Plan](./05-implementation-plan.md)
+- [Progress Log](./progress-log.md)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+Please ensure your code follows the existing style and includes appropriate tests.
 
 ## License
 
-This project is proprietary and confidential.
+This project is licensed under the MIT License - see the LICENSE file for details.
