@@ -1,0 +1,21 @@
+# Testing Dependencies for Swim Data Project
+pytest==7.4.0
+pytest-cov==4.1.0
+pytest-mock==3.11.1
+pytest-timeout==2.1.0
+
+# Mock dependencies
+requests-mock==1.11.0
+
+# Selenium for browser automation tests
+selenium==4.13.0
+webdriver-manager==4.0.0
+
+# For testing HTML parsing
+beautifulsoup4==4.12.2
+
+# For parsing and comparing dates
+python-dateutil==2.8.2
+
+# For testing JSON serialization
+jsonschema==4.19.0
